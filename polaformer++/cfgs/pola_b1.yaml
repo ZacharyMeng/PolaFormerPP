@@ -1,0 +1,9 @@
+MODEL:
+  TYPE: polab1
+  NAME: pola_b1_patch4_224
+  
+DATA:
+  BATCH_SIZE: 256
+TRAIN:
+  EPOCHS: 300
+  MIN_LR: 1.0e-7

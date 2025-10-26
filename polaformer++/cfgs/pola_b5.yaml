@@ -1,0 +1,16 @@
+MODEL:
+  TYPE: polab5
+  NAME: pola_b5_patch4_224
+  
+TRAIN:
+  WEIGHT_DECAY: 1e-8
+  EPOCHS: 300
+  WARMUP_EPOCHS: 1
+  COOLDOWN_EPOCHS: 5
+  BASE_LR: 2e-5
+  MIN_LR: 5e-6
+  CLIP_GRAD: None
+
+DATA:
+  BATCH_SIZE: 64
+  
