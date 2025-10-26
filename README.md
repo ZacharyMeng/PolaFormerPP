@@ -1,5 +1,11 @@
 # PolaFormer++: Polarity-aware Linear Attention with Channel-wise Spikiness
-Official code of PolaFormer++, an extension of the ICLR 2025 conference paper, **PolaFormer: Polarity-aware Linear Attention for Vision Transformers**.
+<h5 align="center">
+
+**Weikang Meng, Yadan Luo, Liangyu Huo, Yingjian Li, Yaowei Wang, Zheng Zhang<sup>*</sup>, Heng Tao Shen**
+
+🚀 Welcome to the repo of **PolaFormer++**!
+
+This repo contains the official **PyTorch** code for **PolaFormer++**, the next version of [PolaFormer](https://github.com/ZacharyMeng/PolaFormer)[1].
 
 ## Introduction
 
@@ -100,6 +106,10 @@ bash pretrain.sh
 | b3 | 27M | 5.1G | 84.3% |
 | b4 | 50M | 11G | 85.4% |
 | b5 | 97M | 18G | 85.6% |
+
+## Reference
+
+[1] Meng, Weikang, Yadan Luo, Xin Li, Dongmei Jiang, and Zheng Zhang. "PolaFormer: Polarity-aware Linear Attention for Vision Transformers." In The Thirteenth International Conference on Learning Representations.
 
 ## Acknowledgements
 
