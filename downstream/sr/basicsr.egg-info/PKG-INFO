@@ -1,0 +1,55 @@
+Metadata-Version: 2.1
+Name: basicsr
+Version: 1.4.2
+Summary: Open Source Image and Video Super-Resolution Toolbox
+Home-page: https://github.com/xinntao/BasicSR
+Author: Xintao Wang
+Author-email: xintao.wang@outlook.com
+License: Apache License 2.0
+Keywords: computer vision,restoration,super resolution
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: torch>=1.13
+Requires-Dist: torchvision
+Requires-Dist: numpy
+Requires-Dist: opencv-python
+Requires-Dist: Pillow
+Requires-Dist: tqdm
+Requires-Dist: PyYAML
+Requires-Dist: einops
+Requires-Dist: timm
+Requires-Dist: addict
+Requires-Dist: future
+Requires-Dist: lmdb
+Requires-Dist: yapf
+Requires-Dist: tensorboard
+Requires-Dist: scikit-image
+
+# MambaIRv2-Pola++ (Lightweight SR, ×3 / ×4)
+
+PolaFormer++ attention inside MambaIRv2-Light.
+
+## Install
+
+```bash
+pip install -r requirements.txt
+python setup.py develop
+```
+
+## Train / Test
+
+```bash
+bash train.sh 3
+bash train.sh 4
+bash test.sh 3 /path/to/your_x3.pth
+bash test.sh 4 /path/to/your_x4.pth
+```
+
+Configs: `options/train|test/mambairv2/*_x{3,4}.yml`  
+No pretrained weights are shipped in this package.

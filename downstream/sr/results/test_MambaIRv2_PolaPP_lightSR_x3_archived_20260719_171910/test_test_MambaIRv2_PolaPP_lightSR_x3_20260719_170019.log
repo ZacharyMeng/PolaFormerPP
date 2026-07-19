@@ -1,0 +1,544 @@
+2026-07-19 17:00:19,584 INFO: 
+  name: test_MambaIRv2_PolaPP_lightSR_x3
+  model_type: MambaIRv2LightModel
+  scale: 3
+  num_gpu: 1
+  manual_seed: 10
+  datasets:[
+    test_1:[
+      name: Set5
+      type: PairedImageDataset
+      dataroot_gt: datasets/testsets/benchmark/Set5/HR
+      dataroot_lq: datasets/testsets/benchmark/Set5/LR_bicubic/X3
+      filename_tmpl: {}x3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+    test_2:[
+      name: Set14
+      type: PairedImageDataset
+      dataroot_gt: datasets/testsets/benchmark/Set14/HR
+      dataroot_lq: datasets/testsets/benchmark/Set14/LR_bicubic/X3
+      filename_tmpl: {}x3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+    test_3:[
+      name: B100
+      type: PairedImageDataset
+      dataroot_gt: datasets/testsets/benchmark/B100/HR
+      dataroot_lq: datasets/testsets/benchmark/B100/LR_bicubic/X3
+      filename_tmpl: {}x3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+    test_4:[
+      name: Urban100
+      type: PairedImageDataset
+      dataroot_gt: datasets/testsets/benchmark/Urban100/HR
+      dataroot_lq: datasets/testsets/benchmark/Urban100/LR_bicubic/X3
+      filename_tmpl: {}x3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+    test_5:[
+      name: Manga109
+      type: PairedImageDataset
+      dataroot_gt: datasets/testsets/benchmark/Manga109/HR
+      dataroot_lq: datasets/testsets/benchmark/Manga109/LR_bicubic/X3
+      filename_tmpl: {}_LRBI_x3
+      io_backend:[
+        type: disk
+      ]
+      phase: test
+      scale: 3
+    ]
+  ]
+  network_g:[
+    type: MambaIRv2Light
+    upscale: 3
+    in_chans: 3
+    img_size: 64
+    img_range: 1.0
+    embed_dim: 48
+    d_state: 8
+    depths: [5, 5, 5, 5]
+    num_heads: [4, 4, 4, 4]
+    window_size: 16
+    inner_rank: 32
+    num_tokens: 64
+    convffn_kernel_size: 5
+    mlp_ratio: 1.0
+    upsampler: pixelshuffledirect
+    resi_connection: 1conv
+  ]
+  path:[
+    pretrain_network_g: /tmp/mambairv2_polapp_x3_clean.pth
+    strict_load_g: True
+    results_root: /data/hly/tpami-re/PolaFormerPP/downstream/sr/results/test_MambaIRv2_PolaPP_lightSR_x3
+    log: /data/hly/tpami-re/PolaFormerPP/downstream/sr/results/test_MambaIRv2_PolaPP_lightSR_x3
+    visualization: /data/hly/tpami-re/PolaFormerPP/downstream/sr/results/test_MambaIRv2_PolaPP_lightSR_x3/visualization
+  ]
+  val:[
+    save_img: False
+    suffix: None
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 3
+        test_y_channel: True
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 3
+        test_y_channel: True
+      ]
+    ]
+  ]
+  dist: False
+  rank: 0
+  world_size: 1
+  auto_resume: False
+  is_train: False
+
+2026-07-19 17:00:19,585 INFO: Dataset [PairedImageDataset] - Set5 is built.
+2026-07-19 17:00:19,585 INFO: Number of test images in Set5: 5
+2026-07-19 17:00:19,586 INFO: Dataset [PairedImageDataset] - Set14 is built.
+2026-07-19 17:00:19,586 INFO: Number of test images in Set14: 14
+2026-07-19 17:00:19,589 INFO: Dataset [PairedImageDataset] - B100 is built.
+2026-07-19 17:00:19,589 INFO: Number of test images in B100: 100
+2026-07-19 17:00:19,593 INFO: Dataset [PairedImageDataset] - Urban100 is built.
+2026-07-19 17:00:19,593 INFO: Number of test images in Urban100: 100
+2026-07-19 17:00:19,597 INFO: Dataset [PairedImageDataset] - Manga109 is built.
+2026-07-19 17:00:19,597 INFO: Number of test images in Manga109: 109
+2026-07-19 17:00:19,713 INFO: Network [MambaIRv2Light] is created.
+2026-07-19 17:00:22,907 INFO: Network: MambaIRv2Light, with parameters: 930,347
+2026-07-19 17:00:22,907 INFO: MambaIRv2Light(
+  (conv_first): Conv2d(3, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (patch_embed): PatchEmbed(
+    (norm): LayerNorm((48,), eps=1e-05, elementwise_affine=True)
+  )
+  (patch_unembed): PatchUnEmbed()
+  (layers): ModuleList(
+    (0-3): 4 x ASSB(
+      (patch_embed): PatchEmbed()
+      (patch_unembed): PatchUnEmbed()
+      (residual_group): BasicBlock(
+        dim=48, input_resolution=(64, 64), depth=5
+        (layers): ModuleList(
+          (0-4): 5 x AttentiveLayer(
+            (softmax): Softmax(dim=-1)
+            (lrelu): LeakyReLU(negative_slope=0.01)
+            (sigmoid): Sigmoid()
+            (norm1): LayerNorm((48,), eps=1e-05, elementwise_affine=True)
+            (norm2): LayerNorm((48,), eps=1e-05, elementwise_affine=True)
+            (norm3): LayerNorm((48,), eps=1e-05, elementwise_affine=True)
+            (norm4): LayerNorm((48,), eps=1e-05, elementwise_affine=True)
+            (wqkv): Linear(in_features=48, out_features=144, bias=True)
+            (win_mhsa): WindowAttention(
+              dim=48, window_size=(16, 16), num_heads=4, qkv_bias=True
+              (proj): Linear(in_features=48, out_features=48, bias=True)
+              (softmax): Softmax(dim=-1)
+            )
+            (assm): ASSM(
+              (out_norm): LayerNorm((48,), eps=1e-05, elementwise_affine=True)
+              (out_proj): Linear(in_features=48, out_features=48, bias=True)
+              (in_proj): Sequential(
+                (0): Conv2d(48, 48, kernel_size=(1, 1), stride=(1, 1))
+              )
+              (CPE): Sequential(
+                (0): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=48)
+              )
+              (attn): PolaAttention(
+                (qkvg): Linear(in_features=48, out_features=192, bias=True)
+                (lepe): Conv2d(48, 48, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), groups=48)
+                (proj): Linear(in_features=48, out_features=48, bias=True)
+                (relu): ReLU()
+              )
+            )
+            (convffn1): GatedMLP(
+              (fc1): Linear(in_features=48, out_features=48, bias=True)
+              (act): GELU(approximate='none')
+              (sg): Gate(
+                (norm): LayerNorm((24,), eps=1e-05, elementwise_affine=True)
+                (conv): Conv2d(24, 24, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), groups=24)
+              )
+              (fc2): Linear(in_features=24, out_features=48, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+            (convffn2): GatedMLP(
+              (fc1): Linear(in_features=48, out_features=48, bias=True)
+              (act): GELU(approximate='none')
+              (sg): Gate(
+                (norm): LayerNorm((24,), eps=1e-05, elementwise_affine=True)
+                (conv): Conv2d(24, 24, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2), groups=24)
+              )
+              (fc2): Linear(in_features=24, out_features=48, bias=True)
+              (drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+        )
+      )
+      (conv): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+  (norm): LayerNorm((48,), eps=1e-05, elementwise_affine=True)
+  (conv_after_body): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (upsample): UpsampleOneStep(
+    (0): Conv2d(48, 27, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): PixelShuffle(upscale_factor=3)
+  )
+)
+2026-07-19 17:00:22,933 INFO: Loading MambaIRv2Light model from /tmp/mambairv2_polapp_x3_clean.pth, with param key: [params].
+2026-07-19 17:00:24,593 INFO: Model [MambaIRv2LightModel] is created.
+2026-07-19 17:00:24,594 INFO: ==> Testing Set5 with per-image timing...
+2026-07-19 17:00:29,326 INFO: [Set5] Iter 00000 | batch=1 | time=4702.19 ms | per_img=4702.19 ms | FPS=0.21 | avg_per_img=4702.19 ms | avg_FPS=0.21
+2026-07-19 17:00:29,666 INFO: [Set5] Iter 00001 | batch=1 | time=335.12 ms | per_img=335.12 ms | FPS=2.98 | avg_per_img=2518.66 ms | avg_FPS=0.40
+2026-07-19 17:00:29,836 INFO: [Set5] Iter 00002 | batch=1 | time=165.75 ms | per_img=165.75 ms | FPS=6.03 | avg_per_img=1734.36 ms | avg_FPS=0.58
+2026-07-19 17:00:30,590 INFO: [Set5] Iter 00003 | batch=1 | time=723.10 ms | per_img=723.10 ms | FPS=1.38 | avg_per_img=1481.54 ms | avg_FPS=0.67
+2026-07-19 17:00:30,769 INFO: [Set5] Iter 00004 | batch=1 | time=173.47 ms | per_img=173.47 ms | FPS=5.76 | avg_per_img=1219.93 ms | avg_FPS=0.82
+2026-07-19 17:00:30,769 INFO: [Set5] DONE | images=5 | total=6.18 s | avg_per_img=1235.05 ms | avg_FPS=0.81
+2026-07-19 17:00:30,769 INFO: ==> Testing Set14 with per-image timing...
+2026-07-19 17:00:31,169 INFO: [Set14] Iter 00000 | batch=1 | time=395.01 ms | per_img=395.01 ms | FPS=2.53 | avg_per_img=395.01 ms | avg_FPS=2.53
+2026-07-19 17:00:31,891 INFO: [Set14] Iter 00001 | batch=1 | time=698.90 ms | per_img=698.90 ms | FPS=1.43 | avg_per_img=546.95 ms | avg_FPS=1.83
+2026-07-19 17:00:32,415 INFO: [Set14] Iter 00002 | batch=1 | time=515.98 ms | per_img=515.98 ms | FPS=1.94 | avg_per_img=536.63 ms | avg_FPS=1.86
+2026-07-19 17:00:32,857 INFO: [Set14] Iter 00003 | batch=1 | time=437.47 ms | per_img=437.47 ms | FPS=2.29 | avg_per_img=511.84 ms | avg_FPS=1.95
+2026-07-19 17:00:33,021 INFO: [Set14] Iter 00004 | batch=1 | time=160.37 ms | per_img=160.37 ms | FPS=6.24 | avg_per_img=441.55 ms | avg_FPS=2.26
+2026-07-19 17:00:33,555 INFO: [Set14] Iter 00005 | batch=1 | time=509.11 ms | per_img=509.11 ms | FPS=1.96 | avg_per_img=452.81 ms | avg_FPS=2.21
+2026-07-19 17:00:34,086 INFO: [Set14] Iter 00006 | batch=1 | time=511.06 ms | per_img=511.06 ms | FPS=1.96 | avg_per_img=461.13 ms | avg_FPS=2.17
+2026-07-19 17:00:35,156 INFO: [Set14] Iter 00007 | batch=1 | time=1045.00 ms | per_img=1045.00 ms | FPS=0.96 | avg_per_img=534.11 ms | avg_FPS=1.87
+2026-07-19 17:00:35,674 INFO: [Set14] Iter 00008 | batch=1 | time=492.41 ms | per_img=492.41 ms | FPS=2.03 | avg_per_img=529.48 ms | avg_FPS=1.89
+2026-07-19 17:00:36,648 INFO: [Set14] Iter 00009 | batch=1 | time=962.18 ms | per_img=962.18 ms | FPS=1.04 | avg_per_img=572.75 ms | avg_FPS=1.75
+2026-07-19 17:00:37,034 INFO: [Set14] Iter 00010 | batch=1 | time=376.19 ms | per_img=376.19 ms | FPS=2.66 | avg_per_img=554.88 ms | avg_FPS=1.80
+2026-07-19 17:00:37,741 INFO: [Set14] Iter 00011 | batch=1 | time=685.08 ms | per_img=685.08 ms | FPS=1.46 | avg_per_img=565.73 ms | avg_FPS=1.77
+2026-07-19 17:00:37,954 INFO: [Set14] Iter 00012 | batch=1 | time=208.01 ms | per_img=208.01 ms | FPS=4.81 | avg_per_img=538.21 ms | avg_FPS=1.86
+2026-07-19 17:00:39,075 INFO: [Set14] Iter 00013 | batch=1 | time=1097.08 ms | per_img=1097.08 ms | FPS=0.91 | avg_per_img=578.13 ms | avg_FPS=1.73
+2026-07-19 17:00:39,075 INFO: [Set14] DONE | images=14 | total=8.31 s | avg_per_img=593.28 ms | avg_FPS=1.69
+2026-07-19 17:00:39,075 INFO: ==> Testing B100 with per-image timing...
+2026-07-19 17:00:39,586 INFO: [B100] Iter 00000 | batch=1 | time=495.73 ms | per_img=495.73 ms | FPS=2.02 | avg_per_img=495.73 ms | avg_FPS=2.02
+2026-07-19 17:00:39,905 INFO: [B100] Iter 00001 | batch=1 | time=303.77 ms | per_img=303.77 ms | FPS=3.29 | avg_per_img=399.75 ms | avg_FPS=2.50
+2026-07-19 17:00:40,224 INFO: [B100] Iter 00002 | batch=1 | time=300.79 ms | per_img=300.79 ms | FPS=3.32 | avg_per_img=366.76 ms | avg_FPS=2.73
+2026-07-19 17:00:40,548 INFO: [B100] Iter 00003 | batch=1 | time=306.98 ms | per_img=306.98 ms | FPS=3.26 | avg_per_img=351.82 ms | avg_FPS=2.84
+2026-07-19 17:00:41,093 INFO: [B100] Iter 00004 | batch=1 | time=522.02 ms | per_img=522.02 ms | FPS=1.92 | avg_per_img=385.86 ms | avg_FPS=2.59
+2026-07-19 17:00:41,405 INFO: [B100] Iter 00005 | batch=1 | time=295.82 ms | per_img=295.82 ms | FPS=3.38 | avg_per_img=370.85 ms | avg_FPS=2.70
+2026-07-19 17:00:41,709 INFO: [B100] Iter 00006 | batch=1 | time=287.71 ms | per_img=287.71 ms | FPS=3.48 | avg_per_img=358.97 ms | avg_FPS=2.79
+2026-07-19 17:00:42,023 INFO: [B100] Iter 00007 | batch=1 | time=301.01 ms | per_img=301.01 ms | FPS=3.32 | avg_per_img=351.73 ms | avg_FPS=2.84
+2026-07-19 17:00:42,334 INFO: [B100] Iter 00008 | batch=1 | time=297.74 ms | per_img=297.74 ms | FPS=3.36 | avg_per_img=345.73 ms | avg_FPS=2.89
+2026-07-19 17:00:42,650 INFO: [B100] Iter 00009 | batch=1 | time=301.76 ms | per_img=301.76 ms | FPS=3.31 | avg_per_img=341.33 ms | avg_FPS=2.93
+2026-07-19 17:00:42,963 INFO: [B100] Iter 00010 | batch=1 | time=298.64 ms | per_img=298.64 ms | FPS=3.35 | avg_per_img=337.45 ms | avg_FPS=2.96
+2026-07-19 17:00:43,263 INFO: [B100] Iter 00011 | batch=1 | time=282.42 ms | per_img=282.42 ms | FPS=3.54 | avg_per_img=332.87 ms | avg_FPS=3.00
+2026-07-19 17:00:43,571 INFO: [B100] Iter 00012 | batch=1 | time=290.11 ms | per_img=290.11 ms | FPS=3.45 | avg_per_img=329.58 ms | avg_FPS=3.03
+2026-07-19 17:00:43,884 INFO: [B100] Iter 00013 | batch=1 | time=296.97 ms | per_img=296.97 ms | FPS=3.37 | avg_per_img=327.25 ms | avg_FPS=3.06
+2026-07-19 17:00:44,210 INFO: [B100] Iter 00014 | batch=1 | time=306.27 ms | per_img=306.27 ms | FPS=3.27 | avg_per_img=325.85 ms | avg_FPS=3.07
+2026-07-19 17:00:44,517 INFO: [B100] Iter 00015 | batch=1 | time=300.39 ms | per_img=300.39 ms | FPS=3.33 | avg_per_img=324.26 ms | avg_FPS=3.08
+2026-07-19 17:00:44,822 INFO: [B100] Iter 00016 | batch=1 | time=293.60 ms | per_img=293.60 ms | FPS=3.41 | avg_per_img=322.45 ms | avg_FPS=3.10
+2026-07-19 17:00:45,142 INFO: [B100] Iter 00017 | batch=1 | time=302.17 ms | per_img=302.17 ms | FPS=3.31 | avg_per_img=321.33 ms | avg_FPS=3.11
+2026-07-19 17:00:45,442 INFO: [B100] Iter 00018 | batch=1 | time=286.99 ms | per_img=286.99 ms | FPS=3.48 | avg_per_img=319.52 ms | avg_FPS=3.13
+2026-07-19 17:00:45,760 INFO: [B100] Iter 00019 | batch=1 | time=300.07 ms | per_img=300.07 ms | FPS=3.33 | avg_per_img=318.55 ms | avg_FPS=3.14
+2026-07-19 17:00:46,080 INFO: [B100] Iter 00020 | batch=1 | time=303.38 ms | per_img=303.38 ms | FPS=3.30 | avg_per_img=317.83 ms | avg_FPS=3.15
+2026-07-19 17:00:46,382 INFO: [B100] Iter 00021 | batch=1 | time=290.14 ms | per_img=290.14 ms | FPS=3.45 | avg_per_img=316.57 ms | avg_FPS=3.16
+2026-07-19 17:00:46,703 INFO: [B100] Iter 00022 | batch=1 | time=301.99 ms | per_img=301.99 ms | FPS=3.31 | avg_per_img=315.93 ms | avg_FPS=3.17
+2026-07-19 17:00:47,009 INFO: [B100] Iter 00023 | batch=1 | time=293.28 ms | per_img=293.28 ms | FPS=3.41 | avg_per_img=314.99 ms | avg_FPS=3.17
+2026-07-19 17:00:47,308 INFO: [B100] Iter 00024 | batch=1 | time=288.20 ms | per_img=288.20 ms | FPS=3.47 | avg_per_img=313.92 ms | avg_FPS=3.19
+2026-07-19 17:00:47,612 INFO: [B100] Iter 00025 | batch=1 | time=297.39 ms | per_img=297.39 ms | FPS=3.36 | avg_per_img=313.28 ms | avg_FPS=3.19
+2026-07-19 17:00:47,924 INFO: [B100] Iter 00026 | batch=1 | time=299.53 ms | per_img=299.53 ms | FPS=3.34 | avg_per_img=312.77 ms | avg_FPS=3.20
+2026-07-19 17:00:48,249 INFO: [B100] Iter 00027 | batch=1 | time=304.24 ms | per_img=304.24 ms | FPS=3.29 | avg_per_img=312.47 ms | avg_FPS=3.20
+2026-07-19 17:00:48,564 INFO: [B100] Iter 00028 | batch=1 | time=299.93 ms | per_img=299.93 ms | FPS=3.33 | avg_per_img=312.04 ms | avg_FPS=3.20
+2026-07-19 17:00:48,859 INFO: [B100] Iter 00029 | batch=1 | time=289.23 ms | per_img=289.23 ms | FPS=3.46 | avg_per_img=311.28 ms | avg_FPS=3.21
+2026-07-19 17:00:49,166 INFO: [B100] Iter 00030 | batch=1 | time=300.15 ms | per_img=300.15 ms | FPS=3.33 | avg_per_img=310.92 ms | avg_FPS=3.22
+2026-07-19 17:00:49,484 INFO: [B100] Iter 00031 | batch=1 | time=297.93 ms | per_img=297.93 ms | FPS=3.36 | avg_per_img=310.51 ms | avg_FPS=3.22
+2026-07-19 17:00:49,803 INFO: [B100] Iter 00032 | batch=1 | time=294.60 ms | per_img=294.60 ms | FPS=3.39 | avg_per_img=310.03 ms | avg_FPS=3.23
+2026-07-19 17:00:50,128 INFO: [B100] Iter 00033 | batch=1 | time=299.94 ms | per_img=299.94 ms | FPS=3.33 | avg_per_img=309.73 ms | avg_FPS=3.23
+2026-07-19 17:00:50,440 INFO: [B100] Iter 00034 | batch=1 | time=301.24 ms | per_img=301.24 ms | FPS=3.32 | avg_per_img=309.49 ms | avg_FPS=3.23
+2026-07-19 17:00:50,750 INFO: [B100] Iter 00035 | batch=1 | time=294.72 ms | per_img=294.72 ms | FPS=3.39 | avg_per_img=309.08 ms | avg_FPS=3.24
+2026-07-19 17:00:51,067 INFO: [B100] Iter 00036 | batch=1 | time=301.63 ms | per_img=301.63 ms | FPS=3.32 | avg_per_img=308.88 ms | avg_FPS=3.24
+2026-07-19 17:00:51,377 INFO: [B100] Iter 00037 | batch=1 | time=285.98 ms | per_img=285.98 ms | FPS=3.50 | avg_per_img=308.27 ms | avg_FPS=3.24
+2026-07-19 17:00:51,696 INFO: [B100] Iter 00038 | batch=1 | time=299.90 ms | per_img=299.90 ms | FPS=3.33 | avg_per_img=308.06 ms | avg_FPS=3.25
+2026-07-19 17:00:52,007 INFO: [B100] Iter 00039 | batch=1 | time=299.46 ms | per_img=299.46 ms | FPS=3.34 | avg_per_img=307.85 ms | avg_FPS=3.25
+2026-07-19 17:00:52,309 INFO: [B100] Iter 00040 | batch=1 | time=291.13 ms | per_img=291.13 ms | FPS=3.43 | avg_per_img=307.44 ms | avg_FPS=3.25
+2026-07-19 17:00:52,620 INFO: [B100] Iter 00041 | batch=1 | time=300.18 ms | per_img=300.18 ms | FPS=3.33 | avg_per_img=307.26 ms | avg_FPS=3.25
+2026-07-19 17:00:52,936 INFO: [B100] Iter 00042 | batch=1 | time=298.09 ms | per_img=298.09 ms | FPS=3.35 | avg_per_img=307.05 ms | avg_FPS=3.26
+2026-07-19 17:00:53,246 INFO: [B100] Iter 00043 | batch=1 | time=291.56 ms | per_img=291.56 ms | FPS=3.43 | avg_per_img=306.70 ms | avg_FPS=3.26
+2026-07-19 17:00:53,552 INFO: [B100] Iter 00044 | batch=1 | time=299.69 ms | per_img=299.69 ms | FPS=3.34 | avg_per_img=306.54 ms | avg_FPS=3.26
+2026-07-19 17:00:53,856 INFO: [B100] Iter 00045 | batch=1 | time=297.19 ms | per_img=297.19 ms | FPS=3.36 | avg_per_img=306.34 ms | avg_FPS=3.26
+2026-07-19 17:00:54,171 INFO: [B100] Iter 00046 | batch=1 | time=302.24 ms | per_img=302.24 ms | FPS=3.31 | avg_per_img=306.25 ms | avg_FPS=3.27
+2026-07-19 17:00:54,474 INFO: [B100] Iter 00047 | batch=1 | time=286.11 ms | per_img=286.11 ms | FPS=3.50 | avg_per_img=305.83 ms | avg_FPS=3.27
+2026-07-19 17:00:54,783 INFO: [B100] Iter 00048 | batch=1 | time=299.88 ms | per_img=299.88 ms | FPS=3.33 | avg_per_img=305.71 ms | avg_FPS=3.27
+2026-07-19 17:00:55,094 INFO: [B100] Iter 00049 | batch=1 | time=300.63 ms | per_img=300.63 ms | FPS=3.33 | avg_per_img=305.61 ms | avg_FPS=3.27
+2026-07-19 17:00:55,378 INFO: [B100] Iter 00050 | batch=1 | time=265.54 ms | per_img=265.54 ms | FPS=3.77 | avg_per_img=304.82 ms | avg_FPS=3.28
+2026-07-19 17:00:55,695 INFO: [B100] Iter 00051 | batch=1 | time=303.46 ms | per_img=303.46 ms | FPS=3.30 | avg_per_img=304.80 ms | avg_FPS=3.28
+2026-07-19 17:00:56,002 INFO: [B100] Iter 00052 | batch=1 | time=299.13 ms | per_img=299.13 ms | FPS=3.34 | avg_per_img=304.69 ms | avg_FPS=3.28
+2026-07-19 17:00:56,311 INFO: [B100] Iter 00053 | batch=1 | time=292.05 ms | per_img=292.05 ms | FPS=3.42 | avg_per_img=304.46 ms | avg_FPS=3.28
+2026-07-19 17:00:56,634 INFO: [B100] Iter 00054 | batch=1 | time=301.70 ms | per_img=301.70 ms | FPS=3.31 | avg_per_img=304.41 ms | avg_FPS=3.29
+2026-07-19 17:00:56,951 INFO: [B100] Iter 00055 | batch=1 | time=300.66 ms | per_img=300.66 ms | FPS=3.33 | avg_per_img=304.34 ms | avg_FPS=3.29
+2026-07-19 17:00:57,262 INFO: [B100] Iter 00056 | batch=1 | time=304.87 ms | per_img=304.87 ms | FPS=3.28 | avg_per_img=304.35 ms | avg_FPS=3.29
+2026-07-19 17:00:57,583 INFO: [B100] Iter 00057 | batch=1 | time=306.19 ms | per_img=306.19 ms | FPS=3.27 | avg_per_img=304.38 ms | avg_FPS=3.29
+2026-07-19 17:00:57,896 INFO: [B100] Iter 00058 | batch=1 | time=297.91 ms | per_img=297.91 ms | FPS=3.36 | avg_per_img=304.27 ms | avg_FPS=3.29
+2026-07-19 17:00:58,198 INFO: [B100] Iter 00059 | batch=1 | time=293.24 ms | per_img=293.24 ms | FPS=3.41 | avg_per_img=304.09 ms | avg_FPS=3.29
+2026-07-19 17:00:58,506 INFO: [B100] Iter 00060 | batch=1 | time=300.62 ms | per_img=300.62 ms | FPS=3.33 | avg_per_img=304.03 ms | avg_FPS=3.29
+2026-07-19 17:00:58,814 INFO: [B100] Iter 00061 | batch=1 | time=293.01 ms | per_img=293.01 ms | FPS=3.41 | avg_per_img=303.85 ms | avg_FPS=3.29
+2026-07-19 17:00:59,134 INFO: [B100] Iter 00062 | batch=1 | time=302.15 ms | per_img=302.15 ms | FPS=3.31 | avg_per_img=303.83 ms | avg_FPS=3.29
+2026-07-19 17:00:59,446 INFO: [B100] Iter 00063 | batch=1 | time=299.91 ms | per_img=299.91 ms | FPS=3.33 | avg_per_img=303.76 ms | avg_FPS=3.29
+2026-07-19 17:00:59,753 INFO: [B100] Iter 00064 | batch=1 | time=294.40 ms | per_img=294.40 ms | FPS=3.40 | avg_per_img=303.62 ms | avg_FPS=3.29
+2026-07-19 17:01:00,054 INFO: [B100] Iter 00065 | batch=1 | time=289.12 ms | per_img=289.12 ms | FPS=3.46 | avg_per_img=303.40 ms | avg_FPS=3.30
+2026-07-19 17:01:00,375 INFO: [B100] Iter 00066 | batch=1 | time=306.68 ms | per_img=306.68 ms | FPS=3.26 | avg_per_img=303.45 ms | avg_FPS=3.30
+2026-07-19 17:01:00,686 INFO: [B100] Iter 00067 | batch=1 | time=298.48 ms | per_img=298.48 ms | FPS=3.35 | avg_per_img=303.38 ms | avg_FPS=3.30
+2026-07-19 17:01:00,999 INFO: [B100] Iter 00068 | batch=1 | time=299.53 ms | per_img=299.53 ms | FPS=3.34 | avg_per_img=303.32 ms | avg_FPS=3.30
+2026-07-19 17:01:01,316 INFO: [B100] Iter 00069 | batch=1 | time=299.07 ms | per_img=299.07 ms | FPS=3.34 | avg_per_img=303.26 ms | avg_FPS=3.30
+2026-07-19 17:01:01,637 INFO: [B100] Iter 00070 | batch=1 | time=303.03 ms | per_img=303.03 ms | FPS=3.30 | avg_per_img=303.26 ms | avg_FPS=3.30
+2026-07-19 17:01:01,941 INFO: [B100] Iter 00071 | batch=1 | time=297.29 ms | per_img=297.29 ms | FPS=3.36 | avg_per_img=303.17 ms | avg_FPS=3.30
+2026-07-19 17:01:02,247 INFO: [B100] Iter 00072 | batch=1 | time=298.80 ms | per_img=298.80 ms | FPS=3.35 | avg_per_img=303.11 ms | avg_FPS=3.30
+2026-07-19 17:01:02,568 INFO: [B100] Iter 00073 | batch=1 | time=302.84 ms | per_img=302.84 ms | FPS=3.30 | avg_per_img=303.11 ms | avg_FPS=3.30
+2026-07-19 17:01:02,859 INFO: [B100] Iter 00074 | batch=1 | time=277.63 ms | per_img=277.63 ms | FPS=3.60 | avg_per_img=302.77 ms | avg_FPS=3.30
+2026-07-19 17:01:03,164 INFO: [B100] Iter 00075 | batch=1 | time=287.44 ms | per_img=287.44 ms | FPS=3.48 | avg_per_img=302.57 ms | avg_FPS=3.31
+2026-07-19 17:01:03,457 INFO: [B100] Iter 00076 | batch=1 | time=280.12 ms | per_img=280.12 ms | FPS=3.57 | avg_per_img=302.28 ms | avg_FPS=3.31
+2026-07-19 17:01:03,763 INFO: [B100] Iter 00077 | batch=1 | time=294.03 ms | per_img=294.03 ms | FPS=3.40 | avg_per_img=302.17 ms | avg_FPS=3.31
+2026-07-19 17:01:04,070 INFO: [B100] Iter 00078 | batch=1 | time=299.73 ms | per_img=299.73 ms | FPS=3.34 | avg_per_img=302.14 ms | avg_FPS=3.31
+2026-07-19 17:01:04,374 INFO: [B100] Iter 00079 | batch=1 | time=297.34 ms | per_img=297.34 ms | FPS=3.36 | avg_per_img=302.08 ms | avg_FPS=3.31
+2026-07-19 17:01:04,684 INFO: [B100] Iter 00080 | batch=1 | time=300.91 ms | per_img=300.91 ms | FPS=3.32 | avg_per_img=302.07 ms | avg_FPS=3.31
+2026-07-19 17:01:04,985 INFO: [B100] Iter 00081 | batch=1 | time=293.51 ms | per_img=293.51 ms | FPS=3.41 | avg_per_img=301.96 ms | avg_FPS=3.31
+2026-07-19 17:01:05,292 INFO: [B100] Iter 00082 | batch=1 | time=299.80 ms | per_img=299.80 ms | FPS=3.34 | avg_per_img=301.94 ms | avg_FPS=3.31
+2026-07-19 17:01:05,612 INFO: [B100] Iter 00083 | batch=1 | time=302.47 ms | per_img=302.47 ms | FPS=3.31 | avg_per_img=301.94 ms | avg_FPS=3.31
+2026-07-19 17:01:05,931 INFO: [B100] Iter 00084 | batch=1 | time=302.78 ms | per_img=302.78 ms | FPS=3.30 | avg_per_img=301.95 ms | avg_FPS=3.31
+2026-07-19 17:01:06,242 INFO: [B100] Iter 00085 | batch=1 | time=302.83 ms | per_img=302.83 ms | FPS=3.30 | avg_per_img=301.96 ms | avg_FPS=3.31
+2026-07-19 17:01:06,558 INFO: [B100] Iter 00086 | batch=1 | time=298.41 ms | per_img=298.41 ms | FPS=3.35 | avg_per_img=301.92 ms | avg_FPS=3.31
+2026-07-19 17:01:06,871 INFO: [B100] Iter 00087 | batch=1 | time=296.48 ms | per_img=296.48 ms | FPS=3.37 | avg_per_img=301.86 ms | avg_FPS=3.31
+2026-07-19 17:01:07,179 INFO: [B100] Iter 00088 | batch=1 | time=300.71 ms | per_img=300.71 ms | FPS=3.33 | avg_per_img=301.85 ms | avg_FPS=3.31
+2026-07-19 17:01:07,499 INFO: [B100] Iter 00089 | batch=1 | time=300.91 ms | per_img=300.91 ms | FPS=3.32 | avg_per_img=301.84 ms | avg_FPS=3.31
+2026-07-19 17:01:07,820 INFO: [B100] Iter 00090 | batch=1 | time=304.06 ms | per_img=304.06 ms | FPS=3.29 | avg_per_img=301.86 ms | avg_FPS=3.31
+2026-07-19 17:01:08,141 INFO: [B100] Iter 00091 | batch=1 | time=309.71 ms | per_img=309.71 ms | FPS=3.23 | avg_per_img=301.95 ms | avg_FPS=3.31
+2026-07-19 17:01:08,440 INFO: [B100] Iter 00092 | batch=1 | time=283.97 ms | per_img=283.97 ms | FPS=3.52 | avg_per_img=301.75 ms | avg_FPS=3.31
+2026-07-19 17:01:08,755 INFO: [B100] Iter 00093 | batch=1 | time=300.17 ms | per_img=300.17 ms | FPS=3.33 | avg_per_img=301.74 ms | avg_FPS=3.31
+2026-07-19 17:01:09,073 INFO: [B100] Iter 00094 | batch=1 | time=303.17 ms | per_img=303.17 ms | FPS=3.30 | avg_per_img=301.75 ms | avg_FPS=3.31
+2026-07-19 17:01:09,381 INFO: [B100] Iter 00095 | batch=1 | time=291.03 ms | per_img=291.03 ms | FPS=3.44 | avg_per_img=301.64 ms | avg_FPS=3.32
+2026-07-19 17:01:09,697 INFO: [B100] Iter 00096 | batch=1 | time=301.42 ms | per_img=301.42 ms | FPS=3.32 | avg_per_img=301.64 ms | avg_FPS=3.32
+2026-07-19 17:01:10,004 INFO: [B100] Iter 00097 | batch=1 | time=294.59 ms | per_img=294.59 ms | FPS=3.39 | avg_per_img=301.57 ms | avg_FPS=3.32
+2026-07-19 17:01:10,306 INFO: [B100] Iter 00098 | batch=1 | time=295.40 ms | per_img=295.40 ms | FPS=3.39 | avg_per_img=301.50 ms | avg_FPS=3.32
+2026-07-19 17:01:10,624 INFO: [B100] Iter 00099 | batch=1 | time=299.52 ms | per_img=299.52 ms | FPS=3.34 | avg_per_img=301.48 ms | avg_FPS=3.32
+2026-07-19 17:01:10,624 INFO: [B100] DONE | images=100 | total=31.55 s | avg_per_img=315.49 ms | avg_FPS=3.17
+2026-07-19 17:01:10,624 INFO: ==> Testing Urban100 with per-image timing...
+2026-07-19 17:01:12,447 INFO: [Urban100] Iter 00000 | batch=1 | time=1763.44 ms | per_img=1763.44 ms | FPS=0.57 | avg_per_img=1763.44 ms | avg_FPS=0.57
+2026-07-19 17:01:14,058 INFO: [Urban100] Iter 00001 | batch=1 | time=1579.45 ms | per_img=1579.45 ms | FPS=0.63 | avg_per_img=1671.44 ms | avg_FPS=0.60
+2026-07-19 17:01:15,664 INFO: [Urban100] Iter 00002 | batch=1 | time=1563.76 ms | per_img=1563.76 ms | FPS=0.64 | avg_per_img=1635.55 ms | avg_FPS=0.61
+2026-07-19 17:01:17,266 INFO: [Urban100] Iter 00003 | batch=1 | time=1560.61 ms | per_img=1560.61 ms | FPS=0.64 | avg_per_img=1616.81 ms | avg_FPS=0.62
+2026-07-19 17:01:18,877 INFO: [Urban100] Iter 00004 | batch=1 | time=1563.73 ms | per_img=1563.73 ms | FPS=0.64 | avg_per_img=1606.20 ms | avg_FPS=0.62
+2026-07-19 17:01:20,922 INFO: [Urban100] Iter 00005 | batch=1 | time=1989.73 ms | per_img=1989.73 ms | FPS=0.50 | avg_per_img=1670.12 ms | avg_FPS=0.60
+2026-07-19 17:01:22,519 INFO: [Urban100] Iter 00006 | batch=1 | time=1548.27 ms | per_img=1548.27 ms | FPS=0.65 | avg_per_img=1652.71 ms | avg_FPS=0.61
+2026-07-19 17:01:24,791 INFO: [Urban100] Iter 00007 | batch=1 | time=2225.76 ms | per_img=2225.76 ms | FPS=0.45 | avg_per_img=1724.34 ms | avg_FPS=0.58
+2026-07-19 17:01:26,626 INFO: [Urban100] Iter 00008 | batch=1 | time=1791.83 ms | per_img=1791.83 ms | FPS=0.56 | avg_per_img=1731.84 ms | avg_FPS=0.58
+2026-07-19 17:01:29,308 INFO: [Urban100] Iter 00009 | batch=1 | time=2618.84 ms | per_img=2618.84 ms | FPS=0.38 | avg_per_img=1820.54 ms | avg_FPS=0.55
+2026-07-19 17:01:31,144 INFO: [Urban100] Iter 00010 | batch=1 | time=1810.78 ms | per_img=1810.78 ms | FPS=0.55 | avg_per_img=1819.65 ms | avg_FPS=0.55
+2026-07-19 17:01:32,945 INFO: [Urban100] Iter 00011 | batch=1 | time=1758.42 ms | per_img=1758.42 ms | FPS=0.57 | avg_per_img=1814.55 ms | avg_FPS=0.55
+2026-07-19 17:01:34,752 INFO: [Urban100] Iter 00012 | batch=1 | time=1755.23 ms | per_img=1755.23 ms | FPS=0.57 | avg_per_img=1809.99 ms | avg_FPS=0.55
+2026-07-19 17:01:36,533 INFO: [Urban100] Iter 00013 | batch=1 | time=1729.95 ms | per_img=1729.95 ms | FPS=0.58 | avg_per_img=1804.27 ms | avg_FPS=0.55
+2026-07-19 17:01:38,132 INFO: [Urban100] Iter 00014 | batch=1 | time=1566.38 ms | per_img=1566.38 ms | FPS=0.64 | avg_per_img=1788.41 ms | avg_FPS=0.56
+2026-07-19 17:01:40,093 INFO: [Urban100] Iter 00015 | batch=1 | time=1913.47 ms | per_img=1913.47 ms | FPS=0.52 | avg_per_img=1796.23 ms | avg_FPS=0.56
+2026-07-19 17:01:41,708 INFO: [Urban100] Iter 00016 | batch=1 | time=1578.65 ms | per_img=1578.65 ms | FPS=0.63 | avg_per_img=1783.43 ms | avg_FPS=0.56
+2026-07-19 17:01:43,500 INFO: [Urban100] Iter 00017 | batch=1 | time=1758.57 ms | per_img=1758.57 ms | FPS=0.57 | avg_per_img=1782.05 ms | avg_FPS=0.56
+2026-07-19 17:01:45,126 INFO: [Urban100] Iter 00018 | batch=1 | time=1582.07 ms | per_img=1582.07 ms | FPS=0.63 | avg_per_img=1771.52 ms | avg_FPS=0.56
+2026-07-19 17:01:47,120 INFO: [Urban100] Iter 00019 | batch=1 | time=1954.10 ms | per_img=1954.10 ms | FPS=0.51 | avg_per_img=1780.65 ms | avg_FPS=0.56
+2026-07-19 17:01:48,702 INFO: [Urban100] Iter 00020 | batch=1 | time=1559.04 ms | per_img=1559.04 ms | FPS=0.64 | avg_per_img=1770.10 ms | avg_FPS=0.56
+2026-07-19 17:01:51,422 INFO: [Urban100] Iter 00021 | batch=1 | time=2670.62 ms | per_img=2670.62 ms | FPS=0.37 | avg_per_img=1811.03 ms | avg_FPS=0.55
+2026-07-19 17:01:53,176 INFO: [Urban100] Iter 00022 | batch=1 | time=1716.99 ms | per_img=1716.99 ms | FPS=0.58 | avg_per_img=1806.94 ms | avg_FPS=0.55
+2026-07-19 17:01:55,141 INFO: [Urban100] Iter 00023 | batch=1 | time=1932.48 ms | per_img=1932.48 ms | FPS=0.52 | avg_per_img=1812.17 ms | avg_FPS=0.55
+2026-07-19 17:01:57,528 INFO: [Urban100] Iter 00024 | batch=1 | time=2325.51 ms | per_img=2325.51 ms | FPS=0.43 | avg_per_img=1832.71 ms | avg_FPS=0.55
+2026-07-19 17:01:59,126 INFO: [Urban100] Iter 00025 | batch=1 | time=1574.30 ms | per_img=1574.30 ms | FPS=0.64 | avg_per_img=1822.77 ms | avg_FPS=0.55
+2026-07-19 17:02:00,715 INFO: [Urban100] Iter 00026 | batch=1 | time=1557.96 ms | per_img=1557.96 ms | FPS=0.64 | avg_per_img=1812.96 ms | avg_FPS=0.55
+2026-07-19 17:02:02,351 INFO: [Urban100] Iter 00027 | batch=1 | time=1588.09 ms | per_img=1588.09 ms | FPS=0.63 | avg_per_img=1804.93 ms | avg_FPS=0.55
+2026-07-19 17:02:03,944 INFO: [Urban100] Iter 00028 | batch=1 | time=1553.30 ms | per_img=1553.30 ms | FPS=0.64 | avg_per_img=1796.25 ms | avg_FPS=0.56
+2026-07-19 17:02:05,741 INFO: [Urban100] Iter 00029 | batch=1 | time=1766.06 ms | per_img=1766.06 ms | FPS=0.57 | avg_per_img=1795.25 ms | avg_FPS=0.56
+2026-07-19 17:02:08,138 INFO: [Urban100] Iter 00030 | batch=1 | time=2341.32 ms | per_img=2341.32 ms | FPS=0.43 | avg_per_img=1812.86 ms | avg_FPS=0.55
+2026-07-19 17:02:09,945 INFO: [Urban100] Iter 00031 | batch=1 | time=1761.91 ms | per_img=1761.91 ms | FPS=0.57 | avg_per_img=1811.27 ms | avg_FPS=0.55
+2026-07-19 17:02:11,557 INFO: [Urban100] Iter 00032 | batch=1 | time=1576.34 ms | per_img=1576.34 ms | FPS=0.63 | avg_per_img=1804.15 ms | avg_FPS=0.55
+2026-07-19 17:02:12,767 INFO: [Urban100] Iter 00033 | batch=1 | time=1192.52 ms | per_img=1192.52 ms | FPS=0.84 | avg_per_img=1786.16 ms | avg_FPS=0.56
+2026-07-19 17:02:15,169 INFO: [Urban100] Iter 00034 | batch=1 | time=2339.43 ms | per_img=2339.43 ms | FPS=0.43 | avg_per_img=1801.97 ms | avg_FPS=0.55
+2026-07-19 17:02:16,772 INFO: [Urban100] Iter 00035 | batch=1 | time=1557.69 ms | per_img=1557.69 ms | FPS=0.64 | avg_per_img=1795.18 ms | avg_FPS=0.56
+2026-07-19 17:02:18,533 INFO: [Urban100] Iter 00036 | batch=1 | time=1732.73 ms | per_img=1732.73 ms | FPS=0.58 | avg_per_img=1793.50 ms | avg_FPS=0.56
+2026-07-19 17:02:20,924 INFO: [Urban100] Iter 00037 | batch=1 | time=2337.84 ms | per_img=2337.84 ms | FPS=0.43 | avg_per_img=1807.82 ms | avg_FPS=0.55
+2026-07-19 17:02:23,314 INFO: [Urban100] Iter 00038 | batch=1 | time=2335.25 ms | per_img=2335.25 ms | FPS=0.43 | avg_per_img=1821.34 ms | avg_FPS=0.55
+2026-07-19 17:02:24,912 INFO: [Urban100] Iter 00039 | batch=1 | time=1559.53 ms | per_img=1559.53 ms | FPS=0.64 | avg_per_img=1814.80 ms | avg_FPS=0.55
+2026-07-19 17:02:26,500 INFO: [Urban100] Iter 00040 | batch=1 | time=1552.31 ms | per_img=1552.31 ms | FPS=0.64 | avg_per_img=1808.40 ms | avg_FPS=0.55
+2026-07-19 17:02:28,280 INFO: [Urban100] Iter 00041 | batch=1 | time=1735.82 ms | per_img=1735.82 ms | FPS=0.58 | avg_per_img=1806.67 ms | avg_FPS=0.55
+2026-07-19 17:02:29,499 INFO: [Urban100] Iter 00042 | batch=1 | time=1182.84 ms | per_img=1182.84 ms | FPS=0.85 | avg_per_img=1792.16 ms | avg_FPS=0.56
+2026-07-19 17:02:31,882 INFO: [Urban100] Iter 00043 | batch=1 | time=2332.72 ms | per_img=2332.72 ms | FPS=0.43 | avg_per_img=1804.45 ms | avg_FPS=0.55
+2026-07-19 17:02:34,332 INFO: [Urban100] Iter 00044 | batch=1 | time=2391.90 ms | per_img=2391.90 ms | FPS=0.42 | avg_per_img=1817.50 ms | avg_FPS=0.55
+2026-07-19 17:02:35,921 INFO: [Urban100] Iter 00045 | batch=1 | time=1542.22 ms | per_img=1542.22 ms | FPS=0.65 | avg_per_img=1811.52 ms | avg_FPS=0.55
+2026-07-19 17:02:37,499 INFO: [Urban100] Iter 00046 | batch=1 | time=1548.79 ms | per_img=1548.79 ms | FPS=0.65 | avg_per_img=1805.93 ms | avg_FPS=0.55
+2026-07-19 17:02:39,273 INFO: [Urban100] Iter 00047 | batch=1 | time=1744.67 ms | per_img=1744.67 ms | FPS=0.57 | avg_per_img=1804.65 ms | avg_FPS=0.55
+2026-07-19 17:02:41,649 INFO: [Urban100] Iter 00048 | batch=1 | time=2317.08 ms | per_img=2317.08 ms | FPS=0.43 | avg_per_img=1815.11 ms | avg_FPS=0.55
+2026-07-19 17:02:43,272 INFO: [Urban100] Iter 00049 | batch=1 | time=1577.52 ms | per_img=1577.52 ms | FPS=0.63 | avg_per_img=1810.36 ms | avg_FPS=0.55
+2026-07-19 17:02:44,954 INFO: [Urban100] Iter 00050 | batch=1 | time=1637.66 ms | per_img=1637.66 ms | FPS=0.61 | avg_per_img=1806.97 ms | avg_FPS=0.55
+2026-07-19 17:02:46,779 INFO: [Urban100] Iter 00051 | batch=1 | time=1778.94 ms | per_img=1778.94 ms | FPS=0.56 | avg_per_img=1806.43 ms | avg_FPS=0.55
+2026-07-19 17:02:48,578 INFO: [Urban100] Iter 00052 | batch=1 | time=1760.53 ms | per_img=1760.53 ms | FPS=0.57 | avg_per_img=1805.57 ms | avg_FPS=0.55
+2026-07-19 17:02:50,386 INFO: [Urban100] Iter 00053 | batch=1 | time=1760.76 ms | per_img=1760.76 ms | FPS=0.57 | avg_per_img=1804.74 ms | avg_FPS=0.55
+2026-07-19 17:02:51,995 INFO: [Urban100] Iter 00054 | batch=1 | time=1569.91 ms | per_img=1569.91 ms | FPS=0.64 | avg_per_img=1800.47 ms | avg_FPS=0.56
+2026-07-19 17:02:53,217 INFO: [Urban100] Iter 00055 | batch=1 | time=1198.26 ms | per_img=1198.26 ms | FPS=0.83 | avg_per_img=1789.71 ms | avg_FPS=0.56
+2026-07-19 17:02:54,827 INFO: [Urban100] Iter 00056 | batch=1 | time=1567.32 ms | per_img=1567.32 ms | FPS=0.64 | avg_per_img=1785.81 ms | avg_FPS=0.56
+2026-07-19 17:02:56,395 INFO: [Urban100] Iter 00057 | batch=1 | time=1545.41 ms | per_img=1545.41 ms | FPS=0.65 | avg_per_img=1781.67 ms | avg_FPS=0.56
+2026-07-19 17:02:57,998 INFO: [Urban100] Iter 00058 | batch=1 | time=1558.74 ms | per_img=1558.74 ms | FPS=0.64 | avg_per_img=1777.89 ms | avg_FPS=0.56
+2026-07-19 17:02:59,955 INFO: [Urban100] Iter 00059 | batch=1 | time=1904.09 ms | per_img=1904.09 ms | FPS=0.53 | avg_per_img=1779.99 ms | avg_FPS=0.56
+2026-07-19 17:03:01,728 INFO: [Urban100] Iter 00060 | batch=1 | time=1724.84 ms | per_img=1724.84 ms | FPS=0.58 | avg_per_img=1779.09 ms | avg_FPS=0.56
+2026-07-19 17:03:03,498 INFO: [Urban100] Iter 00061 | batch=1 | time=1732.89 ms | per_img=1732.89 ms | FPS=0.58 | avg_per_img=1778.34 ms | avg_FPS=0.56
+2026-07-19 17:03:05,096 INFO: [Urban100] Iter 00062 | batch=1 | time=1548.70 ms | per_img=1548.70 ms | FPS=0.65 | avg_per_img=1774.70 ms | avg_FPS=0.56
+2026-07-19 17:03:06,699 INFO: [Urban100] Iter 00063 | batch=1 | time=1557.50 ms | per_img=1557.50 ms | FPS=0.64 | avg_per_img=1771.30 ms | avg_FPS=0.56
+2026-07-19 17:03:10,197 INFO: [Urban100] Iter 00064 | batch=1 | time=3424.96 ms | per_img=3424.96 ms | FPS=0.29 | avg_per_img=1796.74 ms | avg_FPS=0.56
+2026-07-19 17:03:11,767 INFO: [Urban100] Iter 00065 | batch=1 | time=1539.47 ms | per_img=1539.47 ms | FPS=0.65 | avg_per_img=1792.85 ms | avg_FPS=0.56
+2026-07-19 17:03:13,562 INFO: [Urban100] Iter 00066 | batch=1 | time=1744.49 ms | per_img=1744.49 ms | FPS=0.57 | avg_per_img=1792.12 ms | avg_FPS=0.56
+2026-07-19 17:03:15,151 INFO: [Urban100] Iter 00067 | batch=1 | time=1544.50 ms | per_img=1544.50 ms | FPS=0.65 | avg_per_img=1788.48 ms | avg_FPS=0.56
+2026-07-19 17:03:16,763 INFO: [Urban100] Iter 00068 | batch=1 | time=1546.97 ms | per_img=1546.97 ms | FPS=0.65 | avg_per_img=1784.98 ms | avg_FPS=0.56
+2026-07-19 17:03:18,342 INFO: [Urban100] Iter 00069 | batch=1 | time=1536.91 ms | per_img=1536.91 ms | FPS=0.65 | avg_per_img=1781.44 ms | avg_FPS=0.56
+2026-07-19 17:03:19,970 INFO: [Urban100] Iter 00070 | batch=1 | time=1587.15 ms | per_img=1587.15 ms | FPS=0.63 | avg_per_img=1778.70 ms | avg_FPS=0.56
+2026-07-19 17:03:21,748 INFO: [Urban100] Iter 00071 | batch=1 | time=1742.61 ms | per_img=1742.61 ms | FPS=0.57 | avg_per_img=1778.20 ms | avg_FPS=0.56
+2026-07-19 17:03:23,316 INFO: [Urban100] Iter 00072 | batch=1 | time=1530.73 ms | per_img=1530.73 ms | FPS=0.65 | avg_per_img=1774.81 ms | avg_FPS=0.56
+2026-07-19 17:03:25,068 INFO: [Urban100] Iter 00073 | batch=1 | time=1712.19 ms | per_img=1712.19 ms | FPS=0.58 | avg_per_img=1773.96 ms | avg_FPS=0.56
+2026-07-19 17:03:26,649 INFO: [Urban100] Iter 00074 | batch=1 | time=1538.18 ms | per_img=1538.18 ms | FPS=0.65 | avg_per_img=1770.82 ms | avg_FPS=0.56
+2026-07-19 17:03:28,242 INFO: [Urban100] Iter 00075 | batch=1 | time=1558.60 ms | per_img=1558.60 ms | FPS=0.64 | avg_per_img=1768.03 ms | avg_FPS=0.57
+2026-07-19 17:03:29,846 INFO: [Urban100] Iter 00076 | batch=1 | time=1563.73 ms | per_img=1563.73 ms | FPS=0.64 | avg_per_img=1765.38 ms | avg_FPS=0.57
+2026-07-19 17:03:32,248 INFO: [Urban100] Iter 00077 | batch=1 | time=2320.85 ms | per_img=2320.85 ms | FPS=0.43 | avg_per_img=1772.50 ms | avg_FPS=0.56
+2026-07-19 17:03:33,832 INFO: [Urban100] Iter 00078 | batch=1 | time=1548.38 ms | per_img=1548.38 ms | FPS=0.65 | avg_per_img=1769.66 ms | avg_FPS=0.57
+2026-07-19 17:03:35,634 INFO: [Urban100] Iter 00079 | batch=1 | time=1718.15 ms | per_img=1718.15 ms | FPS=0.58 | avg_per_img=1769.02 ms | avg_FPS=0.57
+2026-07-19 17:03:38,014 INFO: [Urban100] Iter 00080 | batch=1 | time=2321.52 ms | per_img=2321.52 ms | FPS=0.43 | avg_per_img=1775.84 ms | avg_FPS=0.56
+2026-07-19 17:03:39,578 INFO: [Urban100] Iter 00081 | batch=1 | time=1526.82 ms | per_img=1526.82 ms | FPS=0.65 | avg_per_img=1772.80 ms | avg_FPS=0.56
+2026-07-19 17:03:41,350 INFO: [Urban100] Iter 00082 | batch=1 | time=1721.17 ms | per_img=1721.17 ms | FPS=0.58 | avg_per_img=1772.18 ms | avg_FPS=0.56
+2026-07-19 17:03:43,091 INFO: [Urban100] Iter 00083 | batch=1 | time=1712.08 ms | per_img=1712.08 ms | FPS=0.58 | avg_per_img=1771.46 ms | avg_FPS=0.56
+2026-07-19 17:03:44,682 INFO: [Urban100] Iter 00084 | batch=1 | time=1568.73 ms | per_img=1568.73 ms | FPS=0.64 | avg_per_img=1769.08 ms | avg_FPS=0.57
+2026-07-19 17:03:46,263 INFO: [Urban100] Iter 00085 | batch=1 | time=1539.82 ms | per_img=1539.82 ms | FPS=0.65 | avg_per_img=1766.41 ms | avg_FPS=0.57
+2026-07-19 17:03:47,823 INFO: [Urban100] Iter 00086 | batch=1 | time=1525.62 ms | per_img=1525.62 ms | FPS=0.66 | avg_per_img=1763.64 ms | avg_FPS=0.57
+2026-07-19 17:03:50,172 INFO: [Urban100] Iter 00087 | batch=1 | time=2309.94 ms | per_img=2309.94 ms | FPS=0.43 | avg_per_img=1769.85 ms | avg_FPS=0.57
+2026-07-19 17:03:51,951 INFO: [Urban100] Iter 00088 | batch=1 | time=1733.12 ms | per_img=1733.12 ms | FPS=0.58 | avg_per_img=1769.44 ms | avg_FPS=0.57
+2026-07-19 17:03:53,538 INFO: [Urban100] Iter 00089 | batch=1 | time=1551.02 ms | per_img=1551.02 ms | FPS=0.64 | avg_per_img=1767.01 ms | avg_FPS=0.57
+2026-07-19 17:03:55,298 INFO: [Urban100] Iter 00090 | batch=1 | time=1724.57 ms | per_img=1724.57 ms | FPS=0.58 | avg_per_img=1766.55 ms | avg_FPS=0.57
+2026-07-19 17:03:56,869 INFO: [Urban100] Iter 00091 | batch=1 | time=1542.44 ms | per_img=1542.44 ms | FPS=0.65 | avg_per_img=1764.11 ms | avg_FPS=0.57
+2026-07-19 17:03:58,416 INFO: [Urban100] Iter 00092 | batch=1 | time=1504.39 ms | per_img=1504.39 ms | FPS=0.66 | avg_per_img=1761.32 ms | avg_FPS=0.57
+2026-07-19 17:04:00,017 INFO: [Urban100] Iter 00093 | batch=1 | time=1562.99 ms | per_img=1562.99 ms | FPS=0.64 | avg_per_img=1759.21 ms | avg_FPS=0.57
+2026-07-19 17:04:01,616 INFO: [Urban100] Iter 00094 | batch=1 | time=1555.13 ms | per_img=1555.13 ms | FPS=0.64 | avg_per_img=1757.06 ms | avg_FPS=0.57
+2026-07-19 17:04:03,379 INFO: [Urban100] Iter 00095 | batch=1 | time=1717.37 ms | per_img=1717.37 ms | FPS=0.58 | avg_per_img=1756.65 ms | avg_FPS=0.57
+2026-07-19 17:04:05,721 INFO: [Urban100] Iter 00096 | batch=1 | time=2297.25 ms | per_img=2297.25 ms | FPS=0.44 | avg_per_img=1762.22 ms | avg_FPS=0.57
+2026-07-19 17:04:07,200 INFO: [Urban100] Iter 00097 | batch=1 | time=1437.26 ms | per_img=1437.26 ms | FPS=0.70 | avg_per_img=1758.90 ms | avg_FPS=0.57
+2026-07-19 17:04:08,840 INFO: [Urban100] Iter 00098 | batch=1 | time=1599.48 ms | per_img=1599.48 ms | FPS=0.63 | avg_per_img=1757.29 ms | avg_FPS=0.57
+2026-07-19 17:04:10,478 INFO: [Urban100] Iter 00099 | batch=1 | time=1601.63 ms | per_img=1601.63 ms | FPS=0.62 | avg_per_img=1755.74 ms | avg_FPS=0.57
+2026-07-19 17:04:10,478 INFO: [Urban100] DONE | images=100 | total=179.85 s | avg_per_img=1798.54 ms | avg_FPS=0.56
+2026-07-19 17:04:10,479 INFO: ==> Testing Manga109 with per-image timing...
+2026-07-19 17:04:13,108 INFO: [Manga109] Iter 00000 | batch=1 | time=2545.89 ms | per_img=2545.89 ms | FPS=0.39 | avg_per_img=2545.89 ms | avg_FPS=0.39
+2026-07-19 17:04:15,439 INFO: [Manga109] Iter 00001 | batch=1 | time=2277.82 ms | per_img=2277.82 ms | FPS=0.44 | avg_per_img=2411.86 ms | avg_FPS=0.41
+2026-07-19 17:04:17,700 INFO: [Manga109] Iter 00002 | batch=1 | time=2213.62 ms | per_img=2213.62 ms | FPS=0.45 | avg_per_img=2345.78 ms | avg_FPS=0.43
+2026-07-19 17:04:20,014 INFO: [Manga109] Iter 00003 | batch=1 | time=2246.27 ms | per_img=2246.27 ms | FPS=0.45 | avg_per_img=2320.90 ms | avg_FPS=0.43
+2026-07-19 17:04:22,351 INFO: [Manga109] Iter 00004 | batch=1 | time=2275.32 ms | per_img=2275.32 ms | FPS=0.44 | avg_per_img=2311.78 ms | avg_FPS=0.43
+2026-07-19 17:04:24,648 INFO: [Manga109] Iter 00005 | batch=1 | time=2242.32 ms | per_img=2242.32 ms | FPS=0.45 | avg_per_img=2300.21 ms | avg_FPS=0.43
+2026-07-19 17:04:26,949 INFO: [Manga109] Iter 00006 | batch=1 | time=2253.06 ms | per_img=2253.06 ms | FPS=0.44 | avg_per_img=2293.47 ms | avg_FPS=0.44
+2026-07-19 17:04:29,235 INFO: [Manga109] Iter 00007 | batch=1 | time=2235.98 ms | per_img=2235.98 ms | FPS=0.45 | avg_per_img=2286.28 ms | avg_FPS=0.44
+2026-07-19 17:04:31,526 INFO: [Manga109] Iter 00008 | batch=1 | time=2214.82 ms | per_img=2214.82 ms | FPS=0.45 | avg_per_img=2278.34 ms | avg_FPS=0.44
+2026-07-19 17:04:33,860 INFO: [Manga109] Iter 00009 | batch=1 | time=2261.80 ms | per_img=2261.80 ms | FPS=0.44 | avg_per_img=2276.69 ms | avg_FPS=0.44
+2026-07-19 17:04:36,156 INFO: [Manga109] Iter 00010 | batch=1 | time=2240.52 ms | per_img=2240.52 ms | FPS=0.45 | avg_per_img=2273.40 ms | avg_FPS=0.44
+2026-07-19 17:04:38,461 INFO: [Manga109] Iter 00011 | batch=1 | time=2244.18 ms | per_img=2244.18 ms | FPS=0.45 | avg_per_img=2270.97 ms | avg_FPS=0.44
+2026-07-19 17:04:40,763 INFO: [Manga109] Iter 00012 | batch=1 | time=2243.42 ms | per_img=2243.42 ms | FPS=0.45 | avg_per_img=2268.85 ms | avg_FPS=0.44
+2026-07-19 17:04:43,049 INFO: [Manga109] Iter 00013 | batch=1 | time=2234.59 ms | per_img=2234.59 ms | FPS=0.45 | avg_per_img=2266.40 ms | avg_FPS=0.44
+2026-07-19 17:04:45,310 INFO: [Manga109] Iter 00014 | batch=1 | time=2212.06 ms | per_img=2212.06 ms | FPS=0.45 | avg_per_img=2262.78 ms | avg_FPS=0.44
+2026-07-19 17:04:47,616 INFO: [Manga109] Iter 00015 | batch=1 | time=2234.80 ms | per_img=2234.80 ms | FPS=0.45 | avg_per_img=2261.03 ms | avg_FPS=0.44
+2026-07-19 17:04:49,906 INFO: [Manga109] Iter 00016 | batch=1 | time=2254.28 ms | per_img=2254.28 ms | FPS=0.44 | avg_per_img=2260.63 ms | avg_FPS=0.44
+2026-07-19 17:04:52,197 INFO: [Manga109] Iter 00017 | batch=1 | time=2211.93 ms | per_img=2211.93 ms | FPS=0.45 | avg_per_img=2257.93 ms | avg_FPS=0.44
+2026-07-19 17:04:54,450 INFO: [Manga109] Iter 00018 | batch=1 | time=2226.83 ms | per_img=2226.83 ms | FPS=0.45 | avg_per_img=2256.29 ms | avg_FPS=0.44
+2026-07-19 17:04:56,791 INFO: [Manga109] Iter 00019 | batch=1 | time=2268.95 ms | per_img=2268.95 ms | FPS=0.44 | avg_per_img=2256.92 ms | avg_FPS=0.44
+2026-07-19 17:04:59,065 INFO: [Manga109] Iter 00020 | batch=1 | time=2231.54 ms | per_img=2231.54 ms | FPS=0.45 | avg_per_img=2255.71 ms | avg_FPS=0.44
+2026-07-19 17:05:01,370 INFO: [Manga109] Iter 00021 | batch=1 | time=2249.29 ms | per_img=2249.29 ms | FPS=0.44 | avg_per_img=2255.42 ms | avg_FPS=0.44
+2026-07-19 17:05:03,640 INFO: [Manga109] Iter 00022 | batch=1 | time=2221.20 ms | per_img=2221.20 ms | FPS=0.45 | avg_per_img=2253.93 ms | avg_FPS=0.44
+2026-07-19 17:05:05,911 INFO: [Manga109] Iter 00023 | batch=1 | time=2215.28 ms | per_img=2215.28 ms | FPS=0.45 | avg_per_img=2252.32 ms | avg_FPS=0.44
+2026-07-19 17:05:08,241 INFO: [Manga109] Iter 00024 | batch=1 | time=2268.58 ms | per_img=2268.58 ms | FPS=0.44 | avg_per_img=2252.97 ms | avg_FPS=0.44
+2026-07-19 17:05:10,560 INFO: [Manga109] Iter 00025 | batch=1 | time=2268.88 ms | per_img=2268.88 ms | FPS=0.44 | avg_per_img=2253.59 ms | avg_FPS=0.44
+2026-07-19 17:05:12,899 INFO: [Manga109] Iter 00026 | batch=1 | time=2281.24 ms | per_img=2281.24 ms | FPS=0.44 | avg_per_img=2254.61 ms | avg_FPS=0.44
+2026-07-19 17:05:15,182 INFO: [Manga109] Iter 00027 | batch=1 | time=2226.78 ms | per_img=2226.78 ms | FPS=0.45 | avg_per_img=2253.62 ms | avg_FPS=0.44
+2026-07-19 17:05:17,512 INFO: [Manga109] Iter 00028 | batch=1 | time=2258.24 ms | per_img=2258.24 ms | FPS=0.44 | avg_per_img=2253.78 ms | avg_FPS=0.44
+2026-07-19 17:05:19,810 INFO: [Manga109] Iter 00029 | batch=1 | time=2254.39 ms | per_img=2254.39 ms | FPS=0.44 | avg_per_img=2253.80 ms | avg_FPS=0.44
+2026-07-19 17:05:22,084 INFO: [Manga109] Iter 00030 | batch=1 | time=2222.63 ms | per_img=2222.63 ms | FPS=0.45 | avg_per_img=2252.79 ms | avg_FPS=0.44
+2026-07-19 17:05:24,349 INFO: [Manga109] Iter 00031 | batch=1 | time=2221.65 ms | per_img=2221.65 ms | FPS=0.45 | avg_per_img=2251.82 ms | avg_FPS=0.44
+2026-07-19 17:05:26,707 INFO: [Manga109] Iter 00032 | batch=1 | time=2313.15 ms | per_img=2313.15 ms | FPS=0.43 | avg_per_img=2253.68 ms | avg_FPS=0.44
+2026-07-19 17:05:29,065 INFO: [Manga109] Iter 00033 | batch=1 | time=2284.07 ms | per_img=2284.07 ms | FPS=0.44 | avg_per_img=2254.57 ms | avg_FPS=0.44
+2026-07-19 17:05:31,419 INFO: [Manga109] Iter 00034 | batch=1 | time=2284.16 ms | per_img=2284.16 ms | FPS=0.44 | avg_per_img=2255.42 ms | avg_FPS=0.44
+2026-07-19 17:05:33,714 INFO: [Manga109] Iter 00035 | batch=1 | time=2246.79 ms | per_img=2246.79 ms | FPS=0.45 | avg_per_img=2255.18 ms | avg_FPS=0.44
+2026-07-19 17:05:36,042 INFO: [Manga109] Iter 00036 | batch=1 | time=2247.60 ms | per_img=2247.60 ms | FPS=0.44 | avg_per_img=2254.97 ms | avg_FPS=0.44
+2026-07-19 17:05:38,347 INFO: [Manga109] Iter 00037 | batch=1 | time=2250.97 ms | per_img=2250.97 ms | FPS=0.44 | avg_per_img=2254.87 ms | avg_FPS=0.44
+2026-07-19 17:05:40,659 INFO: [Manga109] Iter 00038 | batch=1 | time=2258.57 ms | per_img=2258.57 ms | FPS=0.44 | avg_per_img=2254.96 ms | avg_FPS=0.44
+2026-07-19 17:05:42,951 INFO: [Manga109] Iter 00039 | batch=1 | time=2248.59 ms | per_img=2248.59 ms | FPS=0.44 | avg_per_img=2254.80 ms | avg_FPS=0.44
+2026-07-19 17:05:45,214 INFO: [Manga109] Iter 00040 | batch=1 | time=2221.88 ms | per_img=2221.88 ms | FPS=0.45 | avg_per_img=2254.00 ms | avg_FPS=0.44
+2026-07-19 17:05:47,523 INFO: [Manga109] Iter 00041 | batch=1 | time=2266.24 ms | per_img=2266.24 ms | FPS=0.44 | avg_per_img=2254.29 ms | avg_FPS=0.44
+2026-07-19 17:05:49,809 INFO: [Manga109] Iter 00042 | batch=1 | time=2229.74 ms | per_img=2229.74 ms | FPS=0.45 | avg_per_img=2253.72 ms | avg_FPS=0.44
+2026-07-19 17:05:52,129 INFO: [Manga109] Iter 00043 | batch=1 | time=2253.19 ms | per_img=2253.19 ms | FPS=0.44 | avg_per_img=2253.71 ms | avg_FPS=0.44
+2026-07-19 17:05:54,431 INFO: [Manga109] Iter 00044 | batch=1 | time=2259.03 ms | per_img=2259.03 ms | FPS=0.44 | avg_per_img=2253.82 ms | avg_FPS=0.44
+2026-07-19 17:05:56,758 INFO: [Manga109] Iter 00045 | batch=1 | time=2262.52 ms | per_img=2262.52 ms | FPS=0.44 | avg_per_img=2254.01 ms | avg_FPS=0.44
+2026-07-19 17:05:59,055 INFO: [Manga109] Iter 00046 | batch=1 | time=2234.98 ms | per_img=2234.98 ms | FPS=0.45 | avg_per_img=2253.61 ms | avg_FPS=0.44
+2026-07-19 17:06:01,382 INFO: [Manga109] Iter 00047 | batch=1 | time=2270.46 ms | per_img=2270.46 ms | FPS=0.44 | avg_per_img=2253.96 ms | avg_FPS=0.44
+2026-07-19 17:06:03,718 INFO: [Manga109] Iter 00048 | batch=1 | time=2269.41 ms | per_img=2269.41 ms | FPS=0.44 | avg_per_img=2254.28 ms | avg_FPS=0.44
+2026-07-19 17:06:06,019 INFO: [Manga109] Iter 00049 | batch=1 | time=2212.21 ms | per_img=2212.21 ms | FPS=0.45 | avg_per_img=2253.43 ms | avg_FPS=0.44
+2026-07-19 17:06:08,335 INFO: [Manga109] Iter 00050 | batch=1 | time=2272.52 ms | per_img=2272.52 ms | FPS=0.44 | avg_per_img=2253.81 ms | avg_FPS=0.44
+2026-07-19 17:06:10,642 INFO: [Manga109] Iter 00051 | batch=1 | time=2264.10 ms | per_img=2264.10 ms | FPS=0.44 | avg_per_img=2254.01 ms | avg_FPS=0.44
+2026-07-19 17:06:12,936 INFO: [Manga109] Iter 00052 | batch=1 | time=2239.79 ms | per_img=2239.79 ms | FPS=0.45 | avg_per_img=2253.74 ms | avg_FPS=0.44
+2026-07-19 17:06:15,243 INFO: [Manga109] Iter 00053 | batch=1 | time=2264.25 ms | per_img=2264.25 ms | FPS=0.44 | avg_per_img=2253.93 ms | avg_FPS=0.44
+2026-07-19 17:06:17,553 INFO: [Manga109] Iter 00054 | batch=1 | time=2238.44 ms | per_img=2238.44 ms | FPS=0.45 | avg_per_img=2253.65 ms | avg_FPS=0.44
+2026-07-19 17:06:19,861 INFO: [Manga109] Iter 00055 | batch=1 | time=2247.86 ms | per_img=2247.86 ms | FPS=0.44 | avg_per_img=2253.55 ms | avg_FPS=0.44
+2026-07-19 17:06:22,190 INFO: [Manga109] Iter 00056 | batch=1 | time=2266.91 ms | per_img=2266.91 ms | FPS=0.44 | avg_per_img=2253.78 ms | avg_FPS=0.44
+2026-07-19 17:06:24,521 INFO: [Manga109] Iter 00057 | batch=1 | time=2249.60 ms | per_img=2249.60 ms | FPS=0.44 | avg_per_img=2253.71 ms | avg_FPS=0.44
+2026-07-19 17:06:26,816 INFO: [Manga109] Iter 00058 | batch=1 | time=2243.58 ms | per_img=2243.58 ms | FPS=0.45 | avg_per_img=2253.54 ms | avg_FPS=0.44
+2026-07-19 17:06:29,126 INFO: [Manga109] Iter 00059 | batch=1 | time=2261.96 ms | per_img=2261.96 ms | FPS=0.44 | avg_per_img=2253.68 ms | avg_FPS=0.44
+2026-07-19 17:06:31,456 INFO: [Manga109] Iter 00060 | batch=1 | time=2258.97 ms | per_img=2258.97 ms | FPS=0.44 | avg_per_img=2253.77 ms | avg_FPS=0.44
+2026-07-19 17:06:33,759 INFO: [Manga109] Iter 00061 | batch=1 | time=2234.17 ms | per_img=2234.17 ms | FPS=0.45 | avg_per_img=2253.45 ms | avg_FPS=0.44
+2026-07-19 17:06:36,022 INFO: [Manga109] Iter 00062 | batch=1 | time=2197.57 ms | per_img=2197.57 ms | FPS=0.46 | avg_per_img=2252.56 ms | avg_FPS=0.44
+2026-07-19 17:06:38,407 INFO: [Manga109] Iter 00063 | batch=1 | time=2324.50 ms | per_img=2324.50 ms | FPS=0.43 | avg_per_img=2253.69 ms | avg_FPS=0.44
+2026-07-19 17:06:40,778 INFO: [Manga109] Iter 00064 | batch=1 | time=2326.43 ms | per_img=2326.43 ms | FPS=0.43 | avg_per_img=2254.81 ms | avg_FPS=0.44
+2026-07-19 17:06:43,123 INFO: [Manga109] Iter 00065 | batch=1 | time=2286.91 ms | per_img=2286.91 ms | FPS=0.44 | avg_per_img=2255.29 ms | avg_FPS=0.44
+2026-07-19 17:06:45,474 INFO: [Manga109] Iter 00066 | batch=1 | time=2286.51 ms | per_img=2286.51 ms | FPS=0.44 | avg_per_img=2255.76 ms | avg_FPS=0.44
+2026-07-19 17:06:47,831 INFO: [Manga109] Iter 00067 | batch=1 | time=2290.79 ms | per_img=2290.79 ms | FPS=0.44 | avg_per_img=2256.27 ms | avg_FPS=0.44
+2026-07-19 17:06:50,189 INFO: [Manga109] Iter 00068 | batch=1 | time=2297.22 ms | per_img=2297.22 ms | FPS=0.44 | avg_per_img=2256.87 ms | avg_FPS=0.44
+2026-07-19 17:06:52,519 INFO: [Manga109] Iter 00069 | batch=1 | time=2267.05 ms | per_img=2267.05 ms | FPS=0.44 | avg_per_img=2257.01 ms | avg_FPS=0.44
+2026-07-19 17:06:54,863 INFO: [Manga109] Iter 00070 | batch=1 | time=2278.26 ms | per_img=2278.26 ms | FPS=0.44 | avg_per_img=2257.31 ms | avg_FPS=0.44
+2026-07-19 17:06:57,212 INFO: [Manga109] Iter 00071 | batch=1 | time=2295.23 ms | per_img=2295.23 ms | FPS=0.44 | avg_per_img=2257.84 ms | avg_FPS=0.44
+2026-07-19 17:06:59,567 INFO: [Manga109] Iter 00072 | batch=1 | time=2294.09 ms | per_img=2294.09 ms | FPS=0.44 | avg_per_img=2258.33 ms | avg_FPS=0.44
+2026-07-19 17:07:01,906 INFO: [Manga109] Iter 00073 | batch=1 | time=2275.56 ms | per_img=2275.56 ms | FPS=0.44 | avg_per_img=2258.57 ms | avg_FPS=0.44
+2026-07-19 17:07:04,259 INFO: [Manga109] Iter 00074 | batch=1 | time=2300.85 ms | per_img=2300.85 ms | FPS=0.43 | avg_per_img=2259.13 ms | avg_FPS=0.44
+2026-07-19 17:07:06,594 INFO: [Manga109] Iter 00075 | batch=1 | time=2279.36 ms | per_img=2279.36 ms | FPS=0.44 | avg_per_img=2259.40 ms | avg_FPS=0.44
+2026-07-19 17:07:08,945 INFO: [Manga109] Iter 00076 | batch=1 | time=2305.84 ms | per_img=2305.84 ms | FPS=0.43 | avg_per_img=2260.00 ms | avg_FPS=0.44
+2026-07-19 17:07:11,303 INFO: [Manga109] Iter 00077 | batch=1 | time=2283.05 ms | per_img=2283.05 ms | FPS=0.44 | avg_per_img=2260.30 ms | avg_FPS=0.44
+2026-07-19 17:07:13,669 INFO: [Manga109] Iter 00078 | batch=1 | time=2271.71 ms | per_img=2271.71 ms | FPS=0.44 | avg_per_img=2260.44 ms | avg_FPS=0.44
+2026-07-19 17:07:16,022 INFO: [Manga109] Iter 00079 | batch=1 | time=2289.58 ms | per_img=2289.58 ms | FPS=0.44 | avg_per_img=2260.80 ms | avg_FPS=0.44
+2026-07-19 17:07:18,329 INFO: [Manga109] Iter 00080 | batch=1 | time=2255.79 ms | per_img=2255.79 ms | FPS=0.44 | avg_per_img=2260.74 ms | avg_FPS=0.44
+2026-07-19 17:07:20,683 INFO: [Manga109] Iter 00081 | batch=1 | time=2281.12 ms | per_img=2281.12 ms | FPS=0.44 | avg_per_img=2260.99 ms | avg_FPS=0.44
+2026-07-19 17:07:23,027 INFO: [Manga109] Iter 00082 | batch=1 | time=2293.70 ms | per_img=2293.70 ms | FPS=0.44 | avg_per_img=2261.39 ms | avg_FPS=0.44
+2026-07-19 17:07:25,376 INFO: [Manga109] Iter 00083 | batch=1 | time=2269.58 ms | per_img=2269.58 ms | FPS=0.44 | avg_per_img=2261.48 ms | avg_FPS=0.44
+2026-07-19 17:07:27,689 INFO: [Manga109] Iter 00084 | batch=1 | time=2254.75 ms | per_img=2254.75 ms | FPS=0.44 | avg_per_img=2261.40 ms | avg_FPS=0.44
+2026-07-19 17:07:30,029 INFO: [Manga109] Iter 00085 | batch=1 | time=2282.14 ms | per_img=2282.14 ms | FPS=0.44 | avg_per_img=2261.64 ms | avg_FPS=0.44
+2026-07-19 17:07:32,353 INFO: [Manga109] Iter 00086 | batch=1 | time=2269.02 ms | per_img=2269.02 ms | FPS=0.44 | avg_per_img=2261.73 ms | avg_FPS=0.44
+2026-07-19 17:07:34,649 INFO: [Manga109] Iter 00087 | batch=1 | time=2242.23 ms | per_img=2242.23 ms | FPS=0.45 | avg_per_img=2261.51 ms | avg_FPS=0.44
+2026-07-19 17:07:37,007 INFO: [Manga109] Iter 00088 | batch=1 | time=2287.64 ms | per_img=2287.64 ms | FPS=0.44 | avg_per_img=2261.80 ms | avg_FPS=0.44
+2026-07-19 17:07:39,361 INFO: [Manga109] Iter 00089 | batch=1 | time=2286.84 ms | per_img=2286.84 ms | FPS=0.44 | avg_per_img=2262.08 ms | avg_FPS=0.44
+2026-07-19 17:07:41,691 INFO: [Manga109] Iter 00090 | batch=1 | time=2275.00 ms | per_img=2275.00 ms | FPS=0.44 | avg_per_img=2262.22 ms | avg_FPS=0.44
+2026-07-19 17:07:44,022 INFO: [Manga109] Iter 00091 | batch=1 | time=2258.51 ms | per_img=2258.51 ms | FPS=0.44 | avg_per_img=2262.18 ms | avg_FPS=0.44
+2026-07-19 17:07:46,358 INFO: [Manga109] Iter 00092 | batch=1 | time=2262.09 ms | per_img=2262.09 ms | FPS=0.44 | avg_per_img=2262.18 ms | avg_FPS=0.44
+2026-07-19 17:07:48,688 INFO: [Manga109] Iter 00093 | batch=1 | time=2268.69 ms | per_img=2268.69 ms | FPS=0.44 | avg_per_img=2262.25 ms | avg_FPS=0.44
+2026-07-19 17:07:51,022 INFO: [Manga109] Iter 00094 | batch=1 | time=2277.95 ms | per_img=2277.95 ms | FPS=0.44 | avg_per_img=2262.42 ms | avg_FPS=0.44
+2026-07-19 17:07:53,337 INFO: [Manga109] Iter 00095 | batch=1 | time=2264.76 ms | per_img=2264.76 ms | FPS=0.44 | avg_per_img=2262.44 ms | avg_FPS=0.44
+2026-07-19 17:07:55,669 INFO: [Manga109] Iter 00096 | batch=1 | time=2261.06 ms | per_img=2261.06 ms | FPS=0.44 | avg_per_img=2262.43 ms | avg_FPS=0.44
+2026-07-19 17:07:58,005 INFO: [Manga109] Iter 00097 | batch=1 | time=2276.55 ms | per_img=2276.55 ms | FPS=0.44 | avg_per_img=2262.57 ms | avg_FPS=0.44
+2026-07-19 17:08:00,346 INFO: [Manga109] Iter 00098 | batch=1 | time=2294.90 ms | per_img=2294.90 ms | FPS=0.44 | avg_per_img=2262.90 ms | avg_FPS=0.44
+2026-07-19 17:08:02,705 INFO: [Manga109] Iter 00099 | batch=1 | time=2290.00 ms | per_img=2290.00 ms | FPS=0.44 | avg_per_img=2263.17 ms | avg_FPS=0.44
+2026-07-19 17:08:04,990 INFO: [Manga109] Iter 00100 | batch=1 | time=2207.59 ms | per_img=2207.59 ms | FPS=0.45 | avg_per_img=2262.62 ms | avg_FPS=0.44
+2026-07-19 17:08:07,367 INFO: [Manga109] Iter 00101 | batch=1 | time=2324.97 ms | per_img=2324.97 ms | FPS=0.43 | avg_per_img=2263.23 ms | avg_FPS=0.44
+2026-07-19 17:08:09,730 INFO: [Manga109] Iter 00102 | batch=1 | time=2319.91 ms | per_img=2319.91 ms | FPS=0.43 | avg_per_img=2263.78 ms | avg_FPS=0.44
+2026-07-19 17:08:12,080 INFO: [Manga109] Iter 00103 | batch=1 | time=2291.86 ms | per_img=2291.86 ms | FPS=0.44 | avg_per_img=2264.05 ms | avg_FPS=0.44
+2026-07-19 17:08:14,407 INFO: [Manga109] Iter 00104 | batch=1 | time=2267.44 ms | per_img=2267.44 ms | FPS=0.44 | avg_per_img=2264.08 ms | avg_FPS=0.44
+2026-07-19 17:08:16,734 INFO: [Manga109] Iter 00105 | batch=1 | time=2272.24 ms | per_img=2272.24 ms | FPS=0.44 | avg_per_img=2264.16 ms | avg_FPS=0.44
+2026-07-19 17:08:19,076 INFO: [Manga109] Iter 00106 | batch=1 | time=2282.21 ms | per_img=2282.21 ms | FPS=0.44 | avg_per_img=2264.33 ms | avg_FPS=0.44
+2026-07-19 17:08:21,393 INFO: [Manga109] Iter 00107 | batch=1 | time=2252.36 ms | per_img=2252.36 ms | FPS=0.44 | avg_per_img=2264.22 ms | avg_FPS=0.44
+2026-07-19 17:08:23,724 INFO: [Manga109] Iter 00108 | batch=1 | time=2276.12 ms | per_img=2276.12 ms | FPS=0.44 | avg_per_img=2264.32 ms | avg_FPS=0.44
+2026-07-19 17:08:23,725 INFO: [Manga109] DONE | images=109 | total=253.25 s | avg_per_img=2323.36 ms | avg_FPS=0.43
+2026-07-19 17:08:23,725 INFO: Total testing time (all datasets): 479.13 seconds
