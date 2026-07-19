@@ -1,0 +1,35 @@
+_base_ = [
+    '../_base_/models/PolaPP_rcnn.py',
+    '../_base_/datasets/coco_instance.py',
+    '../_base_/schedules/schedule_1x.py',
+    '../_base_/default_runtime.py'
+]
+
+model = dict(
+    backbone=dict(
+        out_indices=(0, 1, 2, 3),
+        embed_dims=[96, 192, 384, 512],
+        depths=[4, 6, 12, 6],
+        num_heads=[1, 2, 6, 8],
+        mlp_ratios=[3.5, 3.5, 3.5, 3.5],
+        drop_path_rate=0.4,
+        projection=1024,
+        layerscales=[True, True, True, True],
+        layer_init_values=[1, 1, 1e-06, 1e-06],
+    ),
+    neck=dict(in_channels=[96, 192, 384, 512])
+)
+
+optimizer = dict(_delete_=True, type='AdamW', lr=0.0001, betas=(0.9, 0.999), weight_decay=0.05,
+                 paramwise_cfg=dict(custom_keys={'absolute_pos_embed': dict(decay_mult=0.),
+                                                 'relative_position_bias_table': dict(decay_mult=0.),
+                                                 'norm': dict(decay_mult=0.)}))
+lr_config = dict(step=[8, 11])
+fp16 = dict()
+resume_from = None
+checkpoint_config = dict(max_keep_ckpts=1)
+
+data = dict(
+    samples_per_gpu=2,
+    workers_per_gpu=2,
+)
