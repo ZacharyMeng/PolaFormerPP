@@ -107,6 +107,13 @@ bash pretrain.sh
 | b4 | 50M | 11G | 85.4% |
 | b5 | 97M | 18G | 85.6% |
 
+## Pretrained Weights
+
+ImageNet-1K pretrained checkpoints are available:
+
+- Link: [https://pan.baidu.com/s/1tjG-Qq2zFwN_HZswAzxarQ?pwd=atba](https://pan.baidu.com/s/1tjG-Qq2zFwN_HZswAzxarQ?pwd=atba)
+- Extraction code: `atba`
+
 ## Reference
 
 [1] Meng, Weikang, Yadan Luo, Xin Li, Dongmei Jiang, and Zheng Zhang. "PolaFormer: Polarity-aware Linear Attention for Vision Transformers." In The Thirteenth International Conference on Learning Representations.
