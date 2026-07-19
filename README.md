@@ -114,6 +114,16 @@ ImageNet-1K pretrained checkpoints are available:
 - Link: [https://pan.baidu.com/s/1tjG-Qq2zFwN_HZswAzxarQ?pwd=atba](https://pan.baidu.com/s/1tjG-Qq2zFwN_HZswAzxarQ?pwd=atba)
 - Extraction code: `atba`
 
+## Downstream
+
+| Task | Path |
+| --- | --- |
+| Detection | [`downstream/detection`](downstream/detection) |
+| Segmentation | [`downstream/segmentation`](downstream/segmentation) |
+| Super-Resolution | [`downstream/sr`](downstream/sr) |
+| DiT (ImageNet) | [`downstream/dit`](downstream/dit) |
+| SiT (ImageNet) | [`downstream/sit`](downstream/sit) |
+
 ## Reference
 
 [1] Meng, Weikang, Yadan Luo, Xin Li, Dongmei Jiang, and Zheng Zhang. "PolaFormer: Polarity-aware Linear Attention for Vision Transformers." In The Thirteenth International Conference on Learning Representations.
