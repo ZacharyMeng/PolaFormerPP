@@ -122,7 +122,6 @@ ImageNet-1K pretrained checkpoints are available:
 | Segmentation | [`downstream/segmentation`](downstream/segmentation) |
 | Super-Resolution | [`downstream/sr`](downstream/sr) |
 | DiT (ImageNet) | [`downstream/dit`](downstream/dit) |
-| SiT (ImageNet) | [`downstream/sit`](downstream/sit) |
 
 ## Reference
 
